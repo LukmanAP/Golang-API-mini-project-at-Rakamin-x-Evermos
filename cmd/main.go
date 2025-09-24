@@ -2,6 +2,7 @@ package main
 
 import (
     "log"
+    "path/filepath"
 
     "github.com/gofiber/fiber/v2"
     httpRouter "project-evermos/api/http"
@@ -10,27 +11,26 @@ import (
 )
 
 func main() {
-    // Load config from .env
     cfg, err := config.Load()
     if err != nil {
         log.Fatal(err)
     }
 
-    // Init MySQL connection
-    _, err = db.NewMySQL(cfg.DBHost, cfg.DBPort, cfg.DBUser, cfg.DBPass, cfg.DBName)
+    gdb, err := db.NewMySQL(cfg.DBHost, cfg.DBPort, cfg.DBUser, cfg.DBPass, cfg.DBName)
     if err != nil {
         log.Fatal(err)
     }
 
-    // Fiber app
+    // Run migrations from ./migrations
+    if err := db.RunMigrations(gdb, filepath.Join(".", "migrations")); err != nil {
+        log.Fatal(err)
+    }
+
     app := fiber.New()
 
-    // Register centralized routes
     httpRouter.RegisterRoutes(app)
 
-    app.Get("/", func(c *fiber.Ctx) error {
-        return c.SendString("hello world")
-    })
+    app.Get("/", func(c *fiber.Ctx) error { return c.SendString("hello world") })
 
     if err := app.Listen(":" + cfg.AppPort); err != nil {
         log.Fatal(err)
