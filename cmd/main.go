@@ -28,7 +28,7 @@ func main() {
 
     app := fiber.New()
 
-    httpRouter.RegisterRoutes(app)
+    httpRouter.RegisterRoutes(app, gdb, cfg)
 
     app.Get("/", func(c *fiber.Ctx) error { return c.SendString("hello world") })
 
