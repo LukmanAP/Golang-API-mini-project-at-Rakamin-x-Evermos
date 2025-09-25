@@ -10,14 +10,16 @@ import (
 )
 
 type Config struct {
-	AppPort       string
-	DBHost        string
-	DBPort        string
-	DBUser        string
-	DBPass        string
-	DBName        string
-	JWTSecret     string
-	JWTExpiryDays int
+	AppPort         string
+	DBHost          string
+	DBPort          string
+	DBUser          string
+	DBPass          string
+	DBName          string
+	JWTSecret       string
+	JWTExpiryDays   int
+	UploadDirProduct string
+	BaseFileURL      string
 }
 
 func Load() (*Config, error) {
@@ -25,14 +27,16 @@ func Load() (*Config, error) {
 	_ = godotenv.Overload()
 
 	cfg := &Config{
-		AppPort:       getEnv("APP_PORT", ""),
-		DBHost:        getEnv("DB_HOST", ""),
-		DBPort:        getEnv("DB_PORT", ""),
-		DBUser:        getEnv("DB_USER", ""),
-		DBPass:        getEnv("DB_PASS", ""),
-		DBName:        getEnv("DB_NAME", ""),
-		JWTSecret:     getEnv("JWT_SECRET", ""),
-		JWTExpiryDays: getEnvInt("JWT_EXP_DAYS", 7),
+		AppPort:         getEnv("APP_PORT", ""),
+		DBHost:          getEnv("DB_HOST", ""),
+		DBPort:          getEnv("DB_PORT", ""),
+		DBUser:          getEnv("DB_USER", ""),
+		DBPass:          getEnv("DB_PASS", ""),
+		DBName:          getEnv("DB_NAME", ""),
+		JWTSecret:       getEnv("JWT_SECRET", ""),
+		JWTExpiryDays:   getEnvInt("JWT_EXP_DAYS", 7),
+		UploadDirProduct: getEnv("UPLOAD_DIR_PRODUCT", "uploads/products"),
+		BaseFileURL:      getEnv("BASE_FILE_URL", ""),
 	}
 
 	if cfg.DBHost == "" || cfg.DBUser == "" || cfg.DBName == "" {
