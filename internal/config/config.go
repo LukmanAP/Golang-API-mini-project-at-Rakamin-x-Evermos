@@ -20,6 +20,11 @@ type Config struct {
 	JWTExpiryDays   int
 	UploadDirProduct string
 	BaseFileURL      string
+	// Address/EMSIFA configuration
+	EMSIFABase       string
+	HTTPTimeoutMS    int
+	HTTPRetry        int
+	CacheTTLSeconds  int
 }
 
 func Load() (*Config, error) {
@@ -37,6 +42,11 @@ func Load() (*Config, error) {
 		JWTExpiryDays:   getEnvInt("JWT_EXP_DAYS", 7),
 		UploadDirProduct: getEnv("UPLOAD_DIR_PRODUCT", "uploads/products"),
 		BaseFileURL:      getEnv("BASE_FILE_URL", ""),
+		// Defaults for EMSIFA-based address service
+		EMSIFABase:       getEnv("EMSIFA_BASE", "https://www.emsifa.com/api-wilayah-indonesia/api"),
+		HTTPTimeoutMS:    getEnvInt("HTTP_TIMEOUT_MS", 5000),
+		HTTPRetry:        getEnvInt("HTTP_RETRY", 2),
+		CacheTTLSeconds:  getEnvInt("CACHE_TTL_SECONDS", 86400),
 	}
 
 	if cfg.DBHost == "" || cfg.DBUser == "" || cfg.DBName == "" {

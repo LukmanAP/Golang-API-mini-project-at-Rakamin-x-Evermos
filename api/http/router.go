@@ -6,14 +6,22 @@ import (
 	productHandler "project-evermos/internal/todo/handler/product"
 	tokoHandler "project-evermos/internal/todo/handler/toko"
 	usersHandler "project-evermos/internal/todo/handler/users"
+	transactionHandler "project-evermos/internal/todo/handler/transaction"
 	authRepo "project-evermos/internal/todo/repository/auth"
 	productRepo "project-evermos/internal/todo/repository/product"
 	storeRepo "project-evermos/internal/todo/repository/toko"
 	usersRepo "project-evermos/internal/todo/repository/users"
+	transactionRepo "project-evermos/internal/todo/repository/transaction"
 	authService "project-evermos/internal/todo/service/auth"
 	productService "project-evermos/internal/todo/service/product"
 	tokoService "project-evermos/internal/todo/service/toko"
 	usersService "project-evermos/internal/todo/service/users"
+	transactionService "project-evermos/internal/todo/service/transaction"
+	// Address service imports
+	addressHandler "project-evermos/internal/todo/handler/address"
+	addressRepo "project-evermos/internal/todo/repository/address"
+	addressService "project-evermos/internal/todo/service/address"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
@@ -83,4 +91,23 @@ func RegisterRoutes(app *fiber.App, gdb *gorm.DB, cfg *config.Config) {
 	app.Post("/product", pJWT, pHandler.Create)
 	app.Put("/product/:id", pJWT, pHandler.Update)
 	app.Delete("/product/:id", pJWT, pHandler.Delete)
+
+	// Address (Province/City) public endpoints using EMSIFA
+	addrRepo := addressRepo.NewRepository(cfg.EMSIFABase, cfg.HTTPTimeoutMS, cfg.HTTPRetry)
+	addrSvc := addressService.NewService(addrRepo, time.Duration(cfg.CacheTTLSeconds)*time.Second)
+	addrH := addressHandler.NewHandler(addrSvc)
+	app.Get("/provcity/listprovincies", addrH.ListProvinces)
+	app.Get("/provcity/listcities/:prov_id", addrH.ListCities)
+	app.Get("/provcity/detailprovince/:prov_id", addrH.DetailProvince)
+	app.Get("/provcity/detailcity/:city_id", addrH.DetailCity)
+
+	// Transaction module wiring
+	trxRepo := transactionRepo.NewRepository(gdb)
+	trxService := transactionService.NewService(trxRepo)
+	trxHandler := transactionHandler.NewHandler(trxService)
+
+	trxJWT := usersHandler.JWTMiddleware(cfg.JWTSecret)
+	app.Get("/trx", trxJWT, trxHandler.List)
+	app.Get("/trx/:id", trxJWT, trxHandler.GetByID)
+	app.Post("/trx", trxJWT, trxHandler.Create)
 }

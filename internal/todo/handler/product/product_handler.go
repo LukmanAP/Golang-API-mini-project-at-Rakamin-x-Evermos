@@ -181,7 +181,7 @@ func (h *Handler) Create(c *fiber.Ctx) error {
 			// pastikan direktori ada
 			_ = os.MkdirAll(filepath.Dir(osPath), 0755)
 			if err1 := c.SaveFile(f, osPath); err1 != nil {
-				return respondFail(c, fiber.StatusInternalServerError, "POST", err.Error())
+				return respondFail(c, fiber.StatusInternalServerError, "POST", err1.Error())
 			}
 			base := strings.TrimRight(h.cfg.BaseFileURL, "/")
 			url := base + "/" + strings.TrimLeft(urlPath, "/")
