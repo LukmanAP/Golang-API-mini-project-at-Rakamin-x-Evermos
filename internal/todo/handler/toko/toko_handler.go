@@ -184,61 +184,69 @@ func (h *Handler) List(c *fiber.Ctx) error {
 
 // ---------- Middleware ----------
 
-// JWTMiddleware validates JWT (HS256) from header: Authorization: Bearer <JWT>
+// JWTMiddleware validates JWT (HS256) from header. Supports:
+// - token: <JWT>
+// - Authorization: Bearer <JWT>
 // and sets Locals("user_id") for downstream handlers.
 func JWTMiddleware(secret string) fiber.Handler {
-	return func(c *fiber.Ctx) error {
-		auth := strings.TrimSpace(c.Get("Authorization"))
-		parts := strings.Fields(auth)
-		if len(parts) != 2 || !strings.EqualFold(parts[0], "Bearer") {
-			return fail(c, fiber.StatusUnauthorized, "GET", "Unauthorized")
-		}
-		tok := strings.TrimSpace(parts[1])
-		if tok == "" {
-			return fail(c, fiber.StatusUnauthorized, "GET", "Unauthorized")
-		}
-		tkn, err := jwt.Parse(tok, func(token *jwt.Token) (interface{}, error) {
-			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
-			}
-			return []byte(secret), nil
-		})
-		if err != nil || !tkn.Valid {
-			return fail(c, fiber.StatusUnauthorized, "GET", "Unauthorized")
-		}
-		if claims, ok := tkn.Claims.(jwt.MapClaims); ok {
-			var uid uint
-			if v, ok := claims["user_id"]; ok {
-				switch vv := v.(type) {
-				case float64:
-					uid = uint(vv)
-				case string:
-					if n, err := strconv.ParseUint(vv, 10, 64); err == nil {
-						uid = uint(n)
-					}
-				}
-			} else if v, ok := claims["id"]; ok {
-				switch vv := v.(type) {
-				case float64:
-					uid = uint(vv)
-				case string:
-					if n, err := strconv.ParseUint(vv, 10, 64); err == nil {
-						uid = uint(n)
-					}
-				}
-			} else if v, ok := claims["sub"]; ok {
-				if s, ok := v.(string); ok {
-					if n, err := strconv.ParseUint(s, 10, 64); err == nil {
-						uid = uint(n)
-					}
-				}
-			}
-			if uid == 0 {
-				return fail(c, fiber.StatusUnauthorized, "GET", "Unauthorized")
-			}
-			c.Locals("user_id", uid)
-			return c.Next()
-		}
-		return fail(c, fiber.StatusUnauthorized, "GET", "Unauthorized")
-	}
+    return func(c *fiber.Ctx) error {
+        // Try custom header 'token' first
+        tok := strings.TrimSpace(c.Get("token"))
+        // Fallback: support standard Authorization: Bearer <token>
+        if tok == "" {
+            auth := strings.TrimSpace(c.Get("Authorization"))
+            if auth != "" {
+                parts := strings.Fields(auth)
+                if len(parts) == 2 && strings.EqualFold(parts[0], "Bearer") {
+                    tok = strings.TrimSpace(parts[1])
+                }
+            }
+        }
+        if tok == "" {
+            return fail(c, fiber.StatusUnauthorized, "GET", "Unauthorized")
+        }
+        tkn, err := jwt.Parse(tok, func(token *jwt.Token) (interface{}, error) {
+            if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+                return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"]) 
+            }
+            return []byte(secret), nil
+        })
+        if err != nil || !tkn.Valid {
+            return fail(c, fiber.StatusUnauthorized, "GET", "Unauthorized")
+        }
+        if claims, ok := tkn.Claims.(jwt.MapClaims); ok {
+            var uid uint
+            if v, ok := claims["user_id"]; ok {
+                switch vv := v.(type) {
+                case float64:
+                    uid = uint(vv)
+                case string:
+                    if n, err := strconv.ParseUint(vv, 10, 64); err == nil {
+                        uid = uint(n)
+                    }
+                }
+            } else if v, ok := claims["id"]; ok {
+                switch vv := v.(type) {
+                case float64:
+                    uid = uint(vv)
+                case string:
+                    if n, err := strconv.ParseUint(vv, 10, 64); err == nil {
+                        uid = uint(n)
+                    }
+                }
+            } else if v, ok := claims["sub"]; ok {
+                if s, ok := v.(string); ok {
+                    if n, err := strconv.ParseUint(s, 10, 64); err == nil {
+                        uid = uint(n)
+                    }
+                }
+            }
+            if uid == 0 {
+                return fail(c, fiber.StatusUnauthorized, "GET", "Unauthorized")
+            }
+            c.Locals("user_id", uid)
+            return c.Next()
+        }
+        return fail(c, fiber.StatusUnauthorized, "GET", "Unauthorized")
+    }
 }

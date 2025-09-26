@@ -2,17 +2,20 @@ package http
 
 import (
 	"project-evermos/internal/config"
+	categoryHandler "project-evermos/internal/todo/handler/category"
 	authHandler "project-evermos/internal/todo/handler/auth"
 	productHandler "project-evermos/internal/todo/handler/product"
 	tokoHandler "project-evermos/internal/todo/handler/toko"
 	usersHandler "project-evermos/internal/todo/handler/users"
 	transactionHandler "project-evermos/internal/todo/handler/transaction"
 	authRepo "project-evermos/internal/todo/repository/auth"
+	categoryRepo "project-evermos/internal/todo/repository/category"
 	productRepo "project-evermos/internal/todo/repository/product"
 	storeRepo "project-evermos/internal/todo/repository/toko"
 	usersRepo "project-evermos/internal/todo/repository/users"
 	transactionRepo "project-evermos/internal/todo/repository/transaction"
 	authService "project-evermos/internal/todo/service/auth"
+	categoryService "project-evermos/internal/todo/service/category"
 	productService "project-evermos/internal/todo/service/product"
 	tokoService "project-evermos/internal/todo/service/toko"
 	usersService "project-evermos/internal/todo/service/users"
@@ -100,6 +103,20 @@ func RegisterRoutes(app *fiber.App, gdb *gorm.DB, cfg *config.Config) {
 	app.Get("/provcity/listcities/:prov_id", addrH.ListCities)
 	app.Get("/provcity/detailprovince/:prov_id", addrH.DetailProvince)
 	app.Get("/provcity/detailcity/:city_id", addrH.DetailCity)
+
+	// Category module wiring
+	cRepo := categoryRepo.NewRepository(gdb)
+	cSvc := categoryService.NewService(cRepo)
+	cH := categoryHandler.NewHandler(cSvc)
+	// Public endpoints
+	app.Get("/category", cH.List)
+	app.Get("/category/:id", cH.GetByID)
+	// Private ADMIN ONLY endpoints
+	cJWT := categoryHandler.AuthJWT(cfg.JWTSecret, gdb, "POST")
+	cADM := categoryHandler.RequireAdmin("POST")
+	app.Post("/category", cJWT, cADM, cH.Create)
+	app.Put("/category/:id", cJWT, cADM, cH.Update)
+	app.Delete("/category/:id", cJWT, cADM, cH.Delete)
 
 	// Transaction module wiring
 	trxRepo := transactionRepo.NewRepository(gdb)

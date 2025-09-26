@@ -145,6 +145,7 @@ func (s *Service) CreateAlamat(userID uint, in CreateAlamatInput) (uint, error) 
 }
 
 type UpdateAlamatInput struct {
+    JudulAlamat  string
     NamaPenerima string
     NoTelp       string
     DetailAlamat string
@@ -157,12 +158,13 @@ func (s *Service) UpdateAlamat(userID, id uint, in UpdateAlamatInput) error {
     if a0.IDUser != userID { return ErrForbidden }
 
     var errs []string
+    if strings.TrimSpace(in.JudulAlamat) == "" { errs = append(errs, "judul_alamat wajib diisi") }
     if strings.TrimSpace(in.NamaPenerima) == "" { errs = append(errs, "nama_penerima wajib diisi") }
     if strings.TrimSpace(in.NoTelp) == "" { errs = append(errs, "no_telp wajib diisi") }
     if strings.TrimSpace(in.DetailAlamat) == "" { errs = append(errs, "detail_alamat wajib diisi") }
     if len(errs) > 0 { return errors.New(strings.Join(errs, ", ")) }
 
-    a := &model.Alamat{ID: id, NamaPenerima: strings.TrimSpace(in.NamaPenerima), NoTelp: strings.TrimSpace(in.NoTelp), DetailAlamat: strings.TrimSpace(in.DetailAlamat)}
+    a := &model.Alamat{ID: id, JudulAlamat: strings.TrimSpace(in.JudulAlamat), NamaPenerima: strings.TrimSpace(in.NamaPenerima), NoTelp: strings.TrimSpace(in.NoTelp), DetailAlamat: strings.TrimSpace(in.DetailAlamat)}
     return s.repo.UpdateAlamatForUser(userID, a)
 }
 

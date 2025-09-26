@@ -318,37 +318,39 @@ func (h *Handler) CreateAlamat(c *fiber.Ctx) error {
 
 // PUT /user/alamat/:id
 func (h *Handler) UpdateAlamat(c *fiber.Ctx) error {
-	uid, okJWT := jwtUserID(c)
-	if !okJWT {
-		return respondFail(c, fiber.StatusUnauthorized, "GET", "Unauthorized")
-	}
-	idStr := c.Params("id")
-	id64, err := strconv.ParseUint(idStr, 10, 64)
-	if err != nil || id64 == 0 {
-		return respondFail(c, fiber.StatusBadRequest, "GET", "id tidak valid")
-	}
-	var body struct {
-		NamaPenerima string `json:"nama_penerima"`
-		NoTelp       string `json:"no_telp"`
-		DetailAlamat string `json:"detail_alamat"`
-	}
-	if err := c.BodyParser(&body); err != nil {
-		return respondFail(c, fiber.StatusBadRequest, "GET", "Invalid JSON")
-	}
-	if err := h.s.UpdateAlamat(uid, uint(id64), svc.UpdateAlamatInput{
-		NamaPenerima: body.NamaPenerima,
-		NoTelp:       body.NoTelp,
-		DetailAlamat: body.DetailAlamat,
-	}); err != nil {
-		if errors.Is(err, svc.ErrNotFound) {
-			return respondFail(c, fiber.StatusNotFound, "GET", "record not found")
-		}
-		if errors.Is(err, svc.ErrForbidden) {
-			return respondFail(c, fiber.StatusForbidden, "GET", "forbidden")
-		}
-		return respondFail(c, fiber.StatusBadRequest, "GET", err.Error())
-	}
-	return respondOK(c, "GET", "")
+    uid, okJWT := jwtUserID(c)
+    if !okJWT {
+        return respondFail(c, fiber.StatusUnauthorized, "GET", "Unauthorized")
+    }
+    idStr := c.Params("id")
+    id64, err := strconv.ParseUint(idStr, 10, 64)
+    if err != nil || id64 == 0 {
+        return respondFail(c, fiber.StatusBadRequest, "GET", "id tidak valid")
+    }
+    var body struct {
+        JudulAlamat  string `json:"judul_alamat"`
+        NamaPenerima string `json:"nama_penerima"`
+        NoTelp       string `json:"no_telp"`
+        DetailAlamat string `json:"detail_alamat"`
+    }
+    if err := c.BodyParser(&body); err != nil {
+        return respondFail(c, fiber.StatusBadRequest, "GET", "Invalid JSON")
+    }
+    if err := h.s.UpdateAlamat(uid, uint(id64), svc.UpdateAlamatInput{
+        JudulAlamat:  body.JudulAlamat,
+        NamaPenerima: body.NamaPenerima,
+        NoTelp:       body.NoTelp,
+        DetailAlamat: body.DetailAlamat,
+    }); err != nil {
+        if errors.Is(err, svc.ErrNotFound) {
+            return respondFail(c, fiber.StatusNotFound, "GET", "record not found")
+        }
+        if errors.Is(err, svc.ErrForbidden) {
+            return respondFail(c, fiber.StatusForbidden, "GET", "forbidden")
+        }
+        return respondFail(c, fiber.StatusBadRequest, "GET", err.Error())
+    }
+    return respondOK(c, "GET", "")
 }
 
 // DELETE /user/alamat/:id

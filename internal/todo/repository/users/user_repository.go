@@ -89,8 +89,9 @@ func (r *Repository) UpdateAlamatForUser(userID uint, a *usermodel.Alamat) error
     return r.db.Model(&usermodel.Alamat{}).
         Where("id_user = ? AND id = ?", userID, a.ID).
         Updates(map[string]interface{}{
+            "judul alamat":  a.JudulAlamat,
             "nama penerima": a.NamaPenerima,
-            "no telp":      a.NoTelp,
+            "no telp":       a.NoTelp,
             "detail_alamat": a.DetailAlamat,
         }).Error
 }
