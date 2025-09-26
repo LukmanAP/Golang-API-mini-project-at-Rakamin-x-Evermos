@@ -1,0 +1,1677 @@
+basePath: /
+definitions:
+  http.APIResponseID:
+    properties:
+      data:
+        example: 10
+        type: integer
+      errors:
+        example:
+        - ""
+        items:
+          type: string
+        type: array
+      message:
+        example: Succeed to POST data
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  http.APIResponseString:
+    properties:
+      data:
+        example: ""
+        type: string
+      errors:
+        example:
+        - ""
+        items:
+          type: string
+        type: array
+      message:
+        example: Succeed to PUT data
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  http.AddressCitiesResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/http.CityRef'
+        type: array
+      errors:
+        example:
+        - ""
+        items:
+          type: string
+        type: array
+      message:
+        example: Succeed to get data
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  http.AddressCityDetailResponse:
+    properties:
+      data:
+        $ref: '#/definitions/http.CityRef'
+      errors:
+        example:
+        - ""
+        items:
+          type: string
+        type: array
+      message:
+        example: Succeed to get data
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  http.AddressProvinceDetailResponse:
+    properties:
+      data:
+        $ref: '#/definitions/http.ProvinceRef'
+      errors:
+        example:
+        - ""
+        items:
+          type: string
+        type: array
+      message:
+        example: Succeed to get data
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  http.AddressProvincesResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/http.ProvinceRef'
+        type: array
+      errors:
+        example:
+        - ""
+        items:
+          type: string
+        type: array
+      message:
+        example: Succeed to get data
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  http.AuthLoginData:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      id_kota:
+        $ref: '#/definitions/http.CityRef'
+      id_provinsi:
+        $ref: '#/definitions/http.ProvinceRef'
+      nama:
+        example: John Doe
+        type: string
+      no_telp:
+        example: "08123456789"
+        type: string
+      pekerjaan:
+        example: Reseller
+        type: string
+      tanggal_Lahir:
+        example: 01/01/1990
+        type: string
+      tentang:
+        example: Saya reseller Evermos
+        type: string
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+    type: object
+  http.AuthLoginRequest:
+    properties:
+      kata_sandi:
+        example: password123
+        type: string
+      no_telp:
+        example: "08123456789"
+        type: string
+    type: object
+  http.AuthLoginResponse:
+    properties:
+      data:
+        $ref: '#/definitions/http.AuthLoginData'
+      errors:
+        example:
+        - ""
+        items:
+          type: string
+        type: array
+      message:
+        example: Succeed to POST data
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  http.AuthRegisterRequest:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      id_kota:
+        example: "1101"
+        type: string
+      id_provinsi:
+        example: "11"
+        type: string
+      kata_sandi:
+        example: password123
+        type: string
+      nama:
+        example: John Doe
+        type: string
+      no_telp:
+        example: "08123456789"
+        type: string
+      pekerjaan:
+        example: Reseller
+        type: string
+      tanggal_Lahir:
+        example: 01/01/1990
+        type: string
+    type: object
+  http.AuthRegisterResponse:
+    properties:
+      data:
+        example: Register Succeed
+        type: string
+      errors:
+        example:
+        - ""
+        items:
+          type: string
+        type: array
+      message:
+        example: Succeed to POST data
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  http.CategoryCreateRequest:
+    properties:
+      nama_category:
+        example: Fashion
+        type: string
+    type: object
+  http.CategoryDetailResponse:
+    properties:
+      data:
+        $ref: '#/definitions/http.CategoryItem'
+      errors:
+        example:
+        - ""
+        items:
+          type: string
+        type: array
+      message:
+        example: Succeed to GET data
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  http.CategoryItem:
+    properties:
+      id:
+        example: 1
+        type: integer
+      nama_category:
+        example: Fashion
+        type: string
+    type: object
+  http.CategoryListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/http.CategoryItem'
+        type: array
+      errors:
+        example:
+        - ""
+        items:
+          type: string
+        type: array
+      message:
+        example: Succeed to GET data
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  http.CategoryUpdateRequest:
+    properties:
+      nama_category:
+        example: Electronics - Updated
+        type: string
+    type: object
+  http.CityRef:
+    properties:
+      id:
+        example: "1101"
+        type: string
+      name:
+        example: Kota Banda Aceh
+        type: string
+      province_id:
+        example: "11"
+        type: string
+    type: object
+  http.ErrorResponse:
+    properties:
+      data: {}
+      errors:
+        example:
+        - Invalid JSON
+        items:
+          type: string
+        type: array
+      message:
+        example: Failed to POST data
+        type: string
+      status:
+        example: false
+        type: boolean
+    type: object
+  http.Product:
+    properties:
+      category:
+        $ref: '#/definitions/http.ProductCategory'
+      deskripsi:
+        example: Bahan katun, nyaman dipakai
+        type: string
+      harga_konsumen:
+        example: 120000
+        type: integer
+      harga_reseller:
+        example: 90000
+        type: integer
+      id:
+        example: 10
+        type: integer
+      nama_produk:
+        example: Kemeja Pria Lengan Panjang
+        type: string
+      photos:
+        items:
+          $ref: '#/definitions/http.ProductPhoto'
+        type: array
+      slug:
+        example: kemeja-pria-lengan-panjang
+        type: string
+      stok:
+        example: 50
+        type: integer
+      toko:
+        $ref: '#/definitions/http.ProductStore'
+    type: object
+  http.ProductCategory:
+    properties:
+      id:
+        example: 2
+        type: integer
+      nama_category:
+        example: Fashion
+        type: string
+    type: object
+  http.ProductDetailResponse:
+    properties:
+      data:
+        $ref: '#/definitions/http.Product'
+      errors:
+        example:
+        - ""
+        items:
+          type: string
+        type: array
+      message:
+        example: Succeed to GET data
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  http.ProductListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/http.Product'
+        type: array
+      errors:
+        example:
+        - ""
+        items:
+          type: string
+        type: array
+      message:
+        example: Succeed to GET data
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  http.ProductPhoto:
+    properties:
+      id:
+        example: 1
+        type: integer
+      product_id:
+        example: 10
+        type: integer
+      url:
+        example: https://files.local/uploads/products/1758869029454234400-IMG_2867_11zon.jpg
+        type: string
+    type: object
+  http.ProductStore:
+    properties:
+      id:
+        example: 5
+        type: integer
+      nama_toko:
+        example: Toko Budi
+        type: string
+      url_foto:
+        example: https://files.local/uploads/stores/toko-1758868233503052000.jpg
+        type: string
+    type: object
+  http.ProvinceRef:
+    properties:
+      id:
+        example: "11"
+        type: string
+      name:
+        example: Aceh
+        type: string
+    type: object
+  http.TransactionCreateItem:
+    properties:
+      kuantitas:
+        example: 2
+        type: integer
+      product_id:
+        example: 10
+        type: integer
+    type: object
+  http.TransactionCreateRequest:
+    properties:
+      alamat_kirim:
+        example: 3
+        type: integer
+      detail_trx:
+        items:
+          $ref: '#/definitions/http.TransactionCreateItem'
+        type: array
+      method_bayar:
+        example: COD
+        type: string
+    type: object
+  http.TransactionDetailResponse:
+    properties:
+      data:
+        $ref: '#/definitions/http.TrxItem'
+      errors:
+        example:
+        - ""
+        items:
+          type: string
+        type: array
+      message:
+        example: Succeed to GET data
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  http.TransactionListData:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/http.TrxItem'
+        type: array
+      limit:
+        example: 10
+        type: integer
+      page:
+        example: 1
+        type: integer
+    type: object
+  http.TransactionListResponse:
+    properties:
+      data:
+        $ref: '#/definitions/http.TransactionListData'
+      errors:
+        example:
+        - ""
+        items:
+          type: string
+        type: array
+      message:
+        example: Succeed to GET data
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+  http.TrxAlamatKirim:
+    properties:
+      detail_alamat:
+        example: Jl. Sudirman No. 1, Bandung
+        type: string
+      id:
+        example: 3
+        type: integer
+      judul_alamat:
+        example: Rumah
+        type: string
+      nama_penerima:
+        example: John Doe
+        type: string
+      no_telp:
+        example: "08123456789"
+        type: string
+    type: object
+  http.TrxCategory:
+    properties:
+      id:
+        example: 2
+        type: integer
+      nama_category:
+        example: Fashion
+        type: string
+    type: object
+  http.TrxDetailItem:
+    properties:
+      harga_total:
+        example: 240000
+        type: integer
+      kuantitas:
+        example: 2
+        type: integer
+      product:
+        $ref: '#/definitions/http.TrxProduct'
+      toko:
+        $ref: '#/definitions/http.TrxToko'
+    type: object
+  http.TrxItem:
+    properties:
+      alamat_kirim:
+        $ref: '#/definitions/http.TrxAlamatKirim'
+      detail_trx:
+        items:
+          $ref: '#/definitions/http.TrxDetailItem'
+        type: array
+      harga_total:
+        example: 240000
+        type: integer
+      id:
+        example: 1
+        type: integer
+      kode_invoice:
+        example: INV-1700000000
+        type: string
+      method_bayar:
+        example: COD
+        type: string
+    type: object
+  http.TrxPhoto:
+    properties:
+      id:
+        example: 1
+        type: integer
+      product_id:
+        example: 10
+        type: integer
+      url:
+        example: https://files.local/uploads/products/p1.jpg
+        type: string
+    type: object
+  http.TrxProduct:
+    properties:
+      category:
+        $ref: '#/definitions/http.TrxCategory'
+      deskripsi:
+        example: Bahan katun, nyaman dipakai
+        type: string
+      harga_konsumen:
+        example: 120000
+        type: integer
+      harga_reseler:
+        example: 90000
+        type: integer
+      id:
+        example: 10
+        type: integer
+      nama_produk:
+        example: Kemeja Pria Lengan Panjang
+        type: string
+      photos:
+        items:
+          $ref: '#/definitions/http.TrxPhoto'
+        type: array
+      slug:
+        example: kemeja-pria-lengan-panjang
+        type: string
+      toko:
+        $ref: '#/definitions/http.TrxToko'
+    type: object
+  http.TrxToko:
+    properties:
+      id:
+        example: 5
+        type: integer
+      nama_toko:
+        example: Toko Budi
+        type: string
+      url_foto:
+        example: https://files.local/uploads/stores/toko-1.jpg
+        type: string
+    type: object
+  http.UserProfileData:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      id_kota:
+        $ref: '#/definitions/http.CityRef'
+      id_provinsi:
+        $ref: '#/definitions/http.ProvinceRef'
+      nama:
+        example: John Doe
+        type: string
+      no_telp:
+        example: "08123456789"
+        type: string
+      pekerjaan:
+        example: Reseller
+        type: string
+      tanggal_Lahir:
+        example: 01/01/1990
+        type: string
+    type: object
+  http.UserProfileResponse:
+    properties:
+      data:
+        $ref: '#/definitions/http.UserProfileData'
+      errors:
+        example:
+        - ""
+        items:
+          type: string
+        type: array
+      message:
+        example: Succeed to GET data
+        type: string
+      status:
+        example: true
+        type: boolean
+    type: object
+info:
+  contact: {}
+  description: API documentation for Project Evermos
+  title: Evermos API Documentation
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user dengan nomor telepon dan kata sandi
+      parameters:
+      - description: Login credentials
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/http.AuthLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful
+          schema:
+            $ref: '#/definitions/http.AuthLoginResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      summary: Login user
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register akun pengguna baru
+      parameters:
+      - description: Registration data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/http.AuthRegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Registration successful
+          schema:
+            $ref: '#/definitions/http.AuthRegisterResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      summary: Register user
+      tags:
+      - Auth
+  /category:
+    get:
+      description: Get list of all product categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of categories
+          schema:
+            $ref: '#/definitions/http.CategoryListResponse'
+      summary: List categories
+      tags:
+      - Category
+    post:
+      consumes:
+      - application/json
+      description: Create new product category (Admin only)
+      parameters:
+      - description: Category data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/http.CategoryCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category created
+          schema:
+            $ref: '#/definitions/http.APIResponseID'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "403":
+          description: Forbidden - Admin only
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create category
+      tags:
+      - Category
+  /category/{id}:
+    delete:
+      description: Delete category by ID (Admin only)
+      parameters:
+      - description: Category ID
+        example: 1
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category deleted
+          schema:
+            $ref: '#/definitions/http.APIResponseString'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "403":
+          description: Forbidden - Admin only
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "404":
+          description: Category not found
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete category
+      tags:
+      - Category
+    get:
+      description: Get specific category details by ID
+      parameters:
+      - description: Category ID
+        example: 1
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category details
+          schema:
+            $ref: '#/definitions/http.CategoryDetailResponse'
+        "404":
+          description: Category not found
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      summary: Get category by ID
+      tags:
+      - Category
+    put:
+      consumes:
+      - application/json
+      description: Update category by ID (Admin only)
+      parameters:
+      - description: Category ID
+        example: 1
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Category update data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/http.CategoryUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category updated
+          schema:
+            $ref: '#/definitions/http.APIResponseString'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "403":
+          description: Forbidden - Admin only
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "404":
+          description: Category not found
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update category
+      tags:
+      - Category
+  /health:
+    get:
+      description: Health check endpoint to verify server status
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Health check
+      tags:
+      - Health
+  /product:
+    get:
+      description: Get list of products dengan filtering dan pagination
+      parameters:
+      - default: 10
+        description: Results per page
+        example: 10
+        in: query
+        name: limit
+        type: integer
+      - default: 1
+        description: Page number
+        example: 1
+        in: query
+        name: page
+        type: integer
+      - description: Filter by product name
+        example: Kemeja
+        in: query
+        name: nama_produk
+        type: string
+      - description: Filter by category ID
+        example: 2
+        in: query
+        name: category_id
+        type: integer
+      - description: Filter by store ID
+        example: 5
+        in: query
+        name: toko_id
+        type: integer
+      - description: Minimum price filter
+        example: 50000
+        in: query
+        name: min_harga
+        type: integer
+      - description: Maximum price filter
+        example: 150000
+        in: query
+        name: max_harga
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of products
+          schema:
+            $ref: '#/definitions/http.ProductListResponse'
+      summary: List products
+      tags:
+      - Product
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create new product dengan upload foto
+      parameters:
+      - description: Product name
+        example: Kemeja Pria Lengan Panjang
+        in: formData
+        name: nama_produk
+        required: true
+        type: string
+      - description: Category ID
+        example: 2
+        in: formData
+        name: category_id
+        required: true
+        type: integer
+      - description: Reseller price
+        example: 90000
+        in: formData
+        name: harga_reseller
+        required: true
+        type: integer
+      - description: Consumer price
+        example: 120000
+        in: formData
+        name: harga_konsumen
+        required: true
+        type: integer
+      - description: Stock quantity
+        example: 50
+        in: formData
+        name: stok
+        required: true
+        type: integer
+      - description: Product description
+        example: Bahan katun, nyaman dipakai
+        in: formData
+        name: deskripsi
+        type: string
+      - description: Product photos (multiple files supported)
+        in: formData
+        name: photos
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product created
+          schema:
+            $ref: '#/definitions/http.APIResponseID'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create product
+      tags:
+      - Product
+  /product/{id}:
+    delete:
+      description: Delete product by ID
+      parameters:
+      - description: Product ID
+        example: 10
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product deleted
+          schema:
+            $ref: '#/definitions/http.APIResponseString'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete product
+      tags:
+      - Product
+    get:
+      description: Get specific product details by ID
+      parameters:
+      - description: Product ID
+        example: 10
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product details
+          schema:
+            $ref: '#/definitions/http.ProductDetailResponse'
+        "404":
+          description: Product not found
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      summary: Get product by ID
+      tags:
+      - Product
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update product information dengan optional upload foto
+      parameters:
+      - description: Product ID
+        example: 10
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Product name
+        example: Kemeja Pria Premium
+        in: formData
+        name: nama_produk
+        type: string
+      - description: Category ID
+        example: 3
+        in: formData
+        name: category_id
+        type: integer
+      - description: Reseller price
+        example: 95000
+        in: formData
+        name: harga_reseller
+        type: integer
+      - description: Consumer price
+        example: 125000
+        in: formData
+        name: harga_konsumen
+        type: integer
+      - description: Stock quantity
+        example: 60
+        in: formData
+        name: stok
+        type: integer
+      - description: Product description
+        example: Bahan katun premium
+        in: formData
+        name: deskripsi
+        type: string
+      - description: Product photos (multiple files supported)
+        in: formData
+        name: photos
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product updated
+          schema:
+            $ref: '#/definitions/http.APIResponseString'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update product
+      tags:
+      - Product
+  /provcity/detailcity/{city_id}:
+    get:
+      description: Get detailed information about a city
+      parameters:
+      - description: City ID
+        in: path
+        name: city_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: City details
+          schema:
+            $ref: '#/definitions/http.AddressCityDetailResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "502":
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      summary: Get city detail
+      tags:
+      - Address
+  /provcity/detailprovince/{prov_id}:
+    get:
+      description: Get detailed information about a province
+      parameters:
+      - description: Province ID
+        in: path
+        name: prov_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Province details
+          schema:
+            $ref: '#/definitions/http.AddressProvinceDetailResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "502":
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      summary: Get province detail
+      tags:
+      - Address
+  /provcity/listcities/{prov_id}:
+    get:
+      description: Get list of cities in a specific province
+      parameters:
+      - description: Province ID
+        in: path
+        name: prov_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of cities
+          schema:
+            $ref: '#/definitions/http.AddressCitiesResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "502":
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      summary: List cities by province
+      tags:
+      - Address
+  /provcity/listprovincies:
+    get:
+      description: Get list of Indonesian provinces
+      parameters:
+      - description: Search keyword
+        in: query
+        name: search
+        type: string
+      - description: Results limit (0-100)
+        in: query
+        maximum: 100
+        name: limit
+        type: integer
+      - description: Page number (>=1)
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of provinces
+          schema:
+            $ref: '#/definitions/http.AddressProvincesResponse'
+        "502":
+          description: Bad gateway
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "504":
+          description: Gateway timeout
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      summary: List provinces
+      tags:
+      - Address
+  /toko:
+    get:
+      description: Get list of all stores dengan pagination dan pencarian
+      parameters:
+      - default: 10
+        description: Results per page
+        example: 10
+        in: query
+        name: limit
+        type: integer
+      - default: 1
+        description: Page number
+        example: 1
+        in: query
+        name: page
+        type: integer
+      - description: Filter by store name
+        example: Budi
+        in: query
+        name: nama
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of stores
+          schema:
+            $ref: '#/definitions/http.APIResponseString'
+      summary: List stores
+      tags:
+      - Toko
+  /toko/{id_toko}:
+    get:
+      description: Get public store information by ID
+      parameters:
+      - description: Store ID
+        example: 5
+        in: path
+        name: id_toko
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Store information
+          schema:
+            $ref: '#/definitions/http.APIResponseString'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      summary: Get store by ID
+      tags:
+      - Toko
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update store information dengan optional photo upload
+      parameters:
+      - description: Store ID
+        example: 5
+        in: path
+        name: id_toko
+        required: true
+        type: integer
+      - description: Store name
+        example: Toko Budi
+        in: formData
+        name: nama_toko
+        type: string
+      - description: Store photo (jpg, jpeg, png)
+        in: formData
+        name: photo
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update successful
+          schema:
+            $ref: '#/definitions/http.APIResponseString'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update store
+      tags:
+      - Toko
+  /toko/my:
+    get:
+      description: Get current user's store information
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Store information
+          schema:
+            $ref: '#/definitions/http.APIResponseString'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get my store
+      tags:
+      - Toko
+  /trx:
+    get:
+      description: Get list of user's transactions with pagination
+      parameters:
+      - default: 10
+        description: Results per page
+        example: 10
+        in: query
+        name: limit
+        type: integer
+      - default: 1
+        description: Page number
+        example: 1
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of transactions
+          schema:
+            $ref: '#/definitions/http.TransactionListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List transactions
+      tags:
+      - Transaction
+    post:
+      consumes:
+      - application/json
+      description: Create new transaction
+      parameters:
+      - description: Transaction data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/http.TransactionCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Transaction created
+          schema:
+            $ref: '#/definitions/http.APIResponseID'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create transaction
+      tags:
+      - Transaction
+  /trx/{id}:
+    get:
+      description: Get specific transaction details by ID
+      parameters:
+      - description: Transaction ID
+        example: 1
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Transaction details
+          schema:
+            $ref: '#/definitions/http.TransactionDetailResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "404":
+          description: Transaction not found
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get transaction by ID
+      tags:
+      - Transaction
+  /user:
+    get:
+      description: Get current user's profile information
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User profile
+          schema:
+            $ref: '#/definitions/http.UserProfileResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get user profile
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Update current user's profile information
+      parameters:
+      - description: Profile update data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/http.AuthRegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update successful
+          schema:
+            $ref: '#/definitions/http.APIResponseString'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update user profile
+      tags:
+      - Users
+  /user/alamat:
+    get:
+      description: Get list of user's delivery addresses
+      parameters:
+      - description: Filter by address title
+        example: Home
+        in: query
+        name: judul_alamat
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of addresses
+          schema:
+            $ref: '#/definitions/http.APIResponseString'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List user addresses
+      tags:
+      - Users
+    post:
+      consumes:
+      - application/json
+      description: Create new delivery address
+      parameters:
+      - description: Address data
+        in: body
+        name: body
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Address created
+          schema:
+            $ref: '#/definitions/http.APIResponseID'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create address
+      tags:
+      - Users
+  /user/alamat/{id}:
+    delete:
+      description: Delete delivery address by ID
+      parameters:
+      - description: Address ID
+        example: 1
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Address deleted
+          schema:
+            $ref: '#/definitions/http.APIResponseString'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete address
+      tags:
+      - Users
+    get:
+      description: Get specific address by ID
+      parameters:
+      - description: Address ID
+        example: 1
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Address details
+          schema:
+            $ref: '#/definitions/http.APIResponseString'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get address by ID
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Update delivery address by ID
+      parameters:
+      - description: Address ID
+        example: 1
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Address update data
+        in: body
+        name: body
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Address updated
+          schema:
+            $ref: '#/definitions/http.APIResponseString'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/http.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update address
+      tags:
+      - Users
+schemes:
+- http
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

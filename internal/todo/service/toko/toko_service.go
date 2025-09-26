@@ -53,7 +53,10 @@ func (s *Service) UpdateStore(id uint, userID uint, nama string, urlFoto string)
 		return errors.New("nama_toko minimal 3 karakter")
 	}
 	t.NamaToko = strings.TrimSpace(nama)
-	t.UrlFoto = strings.TrimSpace(urlFoto)
+	// Only update photo when provided (non-empty)
+	if strings.TrimSpace(urlFoto) != "" {
+		t.UrlFoto = strings.TrimSpace(urlFoto)
+	}
 	t.UpdatedAt = time.Now()
 	return s.repo.Update(t)
 }

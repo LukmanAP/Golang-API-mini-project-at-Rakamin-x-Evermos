@@ -56,6 +56,8 @@ func RegisterRoutes(app *fiber.App, gdb *gorm.DB, cfg *config.Config) {
 	jwtMW := tokoHandler.JWTMiddleware(cfg.JWTSecret)
 	// Register static route before parameterized route to avoid capture as :id_toko
 	app.Get("/toko/my", jwtMW, tH.GetMy)
+	// Tambahkan route PUT untuk update toko (protected)
+	app.Put("/toko/:id_toko", jwtMW, tH.Update)
 
 	// Public Toko endpoints
 	app.Get("/toko", tH.List)

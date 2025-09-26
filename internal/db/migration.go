@@ -23,6 +23,15 @@ func RunMigrations(gdb *gorm.DB, dir string) error {
         return err
     }
 
+    // Debug: show applied migrations
+    fmt.Println("[migrate] already applied migrations:")
+    for name := range applied {
+        fmt.Println(" *", name)
+    }
+    if applied["0018_full_seed.up.sql"] {
+        fmt.Println("[migrate] NOTE: 0018_full_seed.up.sql is marked as applied in schema_migrations")
+    }
+
     entries, err := os.ReadDir(dir)
     if err != nil {
         // If the directory does not exist or is empty, treat as no migrations to run
@@ -46,9 +55,16 @@ func RunMigrations(gdb *gorm.DB, dir string) error {
 
     sort.Strings(ups)
 
+    // Debug: list found migration files
+    fmt.Println("[migrate] found .up.sql files:")
+    for _, p := range ups {
+        fmt.Println(" -", filepath.Base(p))
+    }
+
     for _, path := range ups {
         base := filepath.Base(path)
         if applied[base] {
+            fmt.Printf("[migrate] skip already applied: %s\n", base)
             continue // already applied
         }
         // Read SQL content
@@ -56,6 +72,7 @@ func RunMigrations(gdb *gorm.DB, dir string) error {
         if err != nil {
             return fmt.Errorf("read migration %s: %w", base, err)
         }
+        fmt.Printf("[migrate] applying: %s\n", base)
         // Execute
         if err := gdb.Exec(string(sqlBytes)).Error; err != nil {
             return fmt.Errorf("apply migration %s: %w", base, err)
@@ -64,6 +81,7 @@ func RunMigrations(gdb *gorm.DB, dir string) error {
         if err := recordApplied(gdb, base); err != nil {
             return fmt.Errorf("record migration %s: %w", base, err)
         }
+        fmt.Printf("[migrate] applied: %s\n", base)
     }
 
     return nil

@@ -3,8 +3,11 @@ package toko
 import (
 	"errors"
 	"fmt"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	tokosvc "project-evermos/internal/todo/service/toko"
 
@@ -57,12 +60,29 @@ func jwtUserID(c *fiber.Ctx) (uint, bool) {
 }
 
 func imgURLExtValid(u string) bool {
-	if u = strings.TrimSpace(strings.ToLower(u)); u == "" {
+	u = strings.TrimSpace(strings.ToLower(u))
+	if u == "" {
 		return true // optional field
+	}
+	// ignore query params when checking extension
+	if i := strings.Index(u, "?"); i >= 0 {
+		u = u[:i]
 	}
 	allowed := []string{".jpg", ".jpeg", ".png", ".gif", ".webp"}
 	for _, ext := range allowed {
 		if strings.HasSuffix(u, ext) {
+			return true
+		}
+	}
+	return false
+}
+
+func isAllowedImageFilename(name string) bool {
+	name = strings.ToLower(strings.TrimSpace(name))
+	allowed := []string{".jpg", ".jpeg", ".png", ".gif", ".webp"}
+	ext := filepath.Ext(name)
+	for _, e := range allowed {
+		if ext == e {
 			return true
 		}
 	}
@@ -118,24 +138,51 @@ func (h *Handler) Update(c *fiber.Ctx) error {
 		return fail(c, fiber.StatusBadRequest, "UPDATE", "id_toko tidak valid")
 	}
 
-	var payload struct {
-		NamaToko string `json:"nama_toko"`
-		UrlFoto  string `json:"url_foto"`
+	// Support both JSON and form-data (multipart or x-www-form-urlencoded)
+	var namaToko, urlFoto string
+	ct := strings.ToLower(c.Get("Content-Type"))
+	if strings.Contains(ct, "multipart/form-data") || strings.Contains(ct, "application/x-www-form-urlencoded") {
+		// try file first
+		if f, ferr := c.FormFile("photo"); ferr == nil && f != nil && f.Size > 0 {
+			if !isAllowedImageFilename(f.Filename) {
+				return fail(c, fiber.StatusBadRequest, "UPDATE", "photo harus file gambar (jpg|jpeg|png|gif|webp)")
+			}
+			_ = os.MkdirAll("uploads/stores", 0755)
+			fname := fmt.Sprintf("toko-%d%s", time.Now().UnixNano(), filepath.Ext(f.Filename))
+			dest := filepath.Join("uploads/stores", fname)
+			if err := c.SaveFile(f, dest); err != nil {
+				return fail(c, fiber.StatusInternalServerError, "UPDATE", "gagal menyimpan file foto")
+			}
+			// store relative path with forward slashes for consistency
+			urlFoto = filepath.ToSlash(dest)
+		} else {
+			urlFoto = c.FormValue("photo")
+		}
+		namaToko = c.FormValue("nama_toko")
+	} else {
+		var payload struct {
+			NamaToko string `json:"nama_toko"`
+			Photo    string `json:"photo"`
+		}
+		if err := c.BodyParser(&payload); err != nil {
+			return fail(c, fiber.StatusBadRequest, "UPDATE", "Invalid JSON or form data")
+		}
+		namaToko = payload.NamaToko
+		urlFoto = payload.Photo
 	}
-	if err := c.BodyParser(&payload); err != nil {
-		return fail(c, fiber.StatusBadRequest, "UPDATE", "Invalid JSON")
-	}
-	payload.NamaToko = strings.TrimSpace(payload.NamaToko)
-	payload.UrlFoto = strings.TrimSpace(payload.UrlFoto)
+	
+	namaToko = strings.TrimSpace(namaToko)
+	urlFoto = strings.TrimSpace(urlFoto)
 
-	if len(payload.NamaToko) < 3 {
+	if len(namaToko) < 3 {
 		return fail(c, fiber.StatusBadRequest, "UPDATE", "nama_toko minimal 3 karakter")
 	}
-	if !imgURLExtValid(payload.UrlFoto) {
-		return fail(c, fiber.StatusBadRequest, "UPDATE", "url_foto harus URL file gambar (jpg|jpeg|png|gif|webp)")
+	// If urlFoto provided as URL string, validate extension
+	if urlFoto != "" && strings.HasPrefix(urlFoto, "http") && !imgURLExtValid(urlFoto) {
+		return fail(c, fiber.StatusBadRequest, "UPDATE", "photo harus URL file gambar (jpg|jpeg|png|gif|webp)")
 	}
 
-	if err := h.svc.UpdateStore(uint(id64), uid, payload.NamaToko, payload.UrlFoto); err != nil {
+	if err := h.svc.UpdateStore(uint(id64), uid, namaToko, urlFoto); err != nil {
 		switch {
 		case errors.Is(err, tokosvc.ErrNotFound):
 			return fail(c, fiber.StatusNotFound, "UPDATE", "Toko tidak ditemukan")

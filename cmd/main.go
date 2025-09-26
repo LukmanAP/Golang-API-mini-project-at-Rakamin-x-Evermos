@@ -5,11 +5,21 @@ import (
     "path/filepath"
 
     "github.com/gofiber/fiber/v2"
+    swagger "github.com/gofiber/swagger"
+    _ "project-evermos/docs"
     httpRouter "project-evermos/api/http"
     "project-evermos/internal/config"
     "project-evermos/internal/db"
 )
 
+// @title Evermos API Documentation
+// @version 1.0
+// @description API documentation for Project Evermos
+// @schemes http
+// @BasePath /
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
     cfg, err := config.Load()
     if err != nil {
@@ -27,6 +37,9 @@ func main() {
     }
 
     app := fiber.New()
+
+    // Swagger UI route
+    app.Get("/swagger/*", swagger.HandlerDefault)
 
     httpRouter.RegisterRoutes(app, gdb, cfg)
 

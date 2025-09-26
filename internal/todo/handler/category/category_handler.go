@@ -80,7 +80,7 @@ func AuthJWT(secret string, db *gorm.DB, op string) fiber.Handler {
 				case float64:
 					uid = uint(vv)
 				case string:
-					if n, err := strconv.ParseUint(vv, 10, 64); err == nil {
+					if n, err1 := strconv.ParseUint(vv, 10, 64); err1 == nil {
 						uid = uint(n)
 					}
 				}
